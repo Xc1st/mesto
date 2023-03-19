@@ -1,0 +1,13 @@
+.element__subtitle {
+    font-weight: 900;
+    font-size: 24px;
+    line-height: 29px;
+    color: #000000;
+    margin: 0;
+    max-width: 198px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    grid-area: subtitle;
+    padding: 21px 0 26px 20px;
+}
