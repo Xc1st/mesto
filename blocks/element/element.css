@@ -1,6 +1,6 @@
 .element {
     display: grid;
-    max-width: 282px;
+    width: 282px;
     background-color: #FFFFFF;
     grid-template-areas: "photo photo"
         "subtitle butlike";
@@ -8,5 +8,4 @@
     grid-template-rows: min-content 1fr;
     grid-template-columns: 1fr min-content;
     border-radius: 10px;
-    overflow: hidden;
 }
