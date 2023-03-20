@@ -23,10 +23,8 @@ function handleFormSubmitProfile(evt) {
     profileSubtitle.textContent = inputLink.value;
     closePopup();
 }
-buttonEditProfile.addEventListener("click", () => {
-    openPopup();
-});
 
+buttonEditProfile.addEventListener("click", openPopup);
 buttonClosePopUpProfile.addEventListener("click", closePopup);
 formEditProfile.addEventListener("submit", handleFormSubmitProfile);
 

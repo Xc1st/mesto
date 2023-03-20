@@ -16,9 +16,10 @@
 
 @media screen and (max-width:700px) {
     .popup__close-icon {
-        height: 18px;
-        width: 18px;
+        height: 20px;
+        width: 20px;
         top: -36px;
+        right: 1px;
     }
 
 }
