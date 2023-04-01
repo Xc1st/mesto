@@ -1,7 +1,3 @@
-.popup__container_type_image {
-    background-color: transparent;
-    max-width: none;
-    padding: 0;
-    position: relative;
-    width: auto;
+.popup_type_image{
+    background-color: rgba(0,0,0,.9);
 }

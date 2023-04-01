@@ -98,7 +98,7 @@ function handleFormSubmitProfile(evt) {
     evt.preventDefault();
     profileTitle.textContent = inputName.value;
     profileSubtitle.textContent = inputLink.value;
-    closePopup();
+    closePopup(popupTypeProfile);
 }
 
 function handleFormSubmitCard(evt) {
