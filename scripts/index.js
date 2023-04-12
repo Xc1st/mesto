@@ -1,4 +1,5 @@
-const popup = document.querySelectorAll(".popup");
+const popup = document.querySelector(".popup");
+const allPopups = document.querySelectorAll('.popup');
 const сardElements = document.querySelector(".elements-container");
 const elementsTemplate = document.querySelector("#elements_template").content;
 const popupTypeProfile = document.querySelector(".popup_type_profile");
@@ -55,8 +56,9 @@ const initialCards = [
 
 function createCard({ name, link }) {
     const newCard = elementsTemplate.querySelector(".element").cloneNode(true);
-    newCard.querySelector(".element__foto").src = link;
-    newCard.querySelector(".element__foto").alt = name;
+    const fotoElement = newCard.querySelector(".element__foto");
+    fotoElement.src = link;
+    fotoElement.alt = name;
     newCard.querySelector(".element__subtitle").textContent = name;
 
     newCard.querySelector(".element__button-like").addEventListener('click', function (evt) { evt.target.classList.toggle("element__button-like_active"); })
@@ -65,7 +67,7 @@ function createCard({ name, link }) {
         newCard.remove();
     })
 
-    newCard.querySelector(".element__foto").addEventListener('click', () => {
+    fotoElement.addEventListener('click', () => {
         popupImage.src = link;
         popupImage.alt = name;
         popupCaption.textContent = name;
@@ -104,7 +106,6 @@ const closePopup = function (popup) {
 // закрытие Esc
 function closePopupEscape(evt) {
     if (evt.key === "Escape") {
-        document.querySelector(".popup_opened");
         closePopup(document.querySelector(".popup_opened"));
     }
 }
@@ -112,8 +113,7 @@ function closePopupEscape(evt) {
 // закрытие по оверлею
 function closePopupOverlay(evt) {
     if (evt.target === evt.currentTarget) {
-        document.querySelector(".popup_opened");
-        closePopup(document.querySelector(".popup_opened"));
+        closePopup(evt.currentTarget);
     }
 }
 
@@ -159,4 +159,4 @@ formEditCard.addEventListener("submit", handleFormSubmitCard);
 
 buttonClosePopUpImg.addEventListener("click", () => closePopup(popupTypeImg));
 
-popup.forEach(element => element.addEventListener('click', closePopupOverlay));
+allPopups.forEach(element => element.addEventListener('click', closePopupOverlay));
