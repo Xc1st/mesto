@@ -1,7 +1,18 @@
-const popup = document.querySelector(".popup");
+import Card from './Card.js';
+import FormValidator from './FormValidator.js';
+
+const validationConfig = {
+    formSelector: '.popup__form',
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__save',
+    // ErrorTypeSelector: '.popup__error_type_',
+    inactiveButtonClass: 'popup__save_disabled',
+    inputErrorClass: 'popup__input_type_error',
+    errorClass: 'popup__error_visible'
+}
+
 const allPopups = document.querySelectorAll('.popup');
 const сardElements = document.querySelector(".elements-container");
-const elementsTemplate = document.querySelector("#elements_template").content;
 const popupTypeProfile = document.querySelector(".popup_type_profile");
 const popupTypeCard = document.querySelector(".popup_type_card");
 const popupTypeImg = document.querySelector(".popup_type_image");
@@ -20,12 +31,10 @@ const inputName = document.querySelector(".popup__input_type_name");
 const inputLink = document.querySelector(".popup__input_type_about");
 const inputTitle = document.querySelector(".popup__input_type_title");
 const inputLinkImg = document.querySelector(".popup__input_type_url");
-// сброс //
-const popupSaveProfile = formEditProfile.querySelector(".popup__save");
-const popupInputListProfile = formEditProfile.querySelectorAll(".popup__input");
-const popupSaveCard = formEditCard.querySelector(".popup__save")
-const popupInputListCard = formEditCard.querySelectorAll(".popup__input");
-
+const cardValidation = new FormValidator(formEditCard, validationConfig);
+cardValidation.enableValidation();
+const profileValidation = new FormValidator(formEditProfile, validationConfig);
+profileValidation.enableValidation();
 
 const initialCards = [
     {
@@ -54,31 +63,25 @@ const initialCards = [
     }
 ];
 
-function createCard({ name, link }) {
-    const newCard = elementsTemplate.querySelector(".element").cloneNode(true);
-    const fotoElement = newCard.querySelector(".element__foto");
-    fotoElement.src = link;
-    fotoElement.alt = name;
-    newCard.querySelector(".element__subtitle").textContent = name;
 
-    newCard.querySelector(".element__button-like").addEventListener('click', function (evt) { evt.target.classList.toggle("element__button-like_active"); })
-
-    newCard.querySelector(".element__button-delete").addEventListener('click', () => {
-        newCard.remove();
-    })
-
-    fotoElement.addEventListener('click', () => {
-        popupImage.src = link;
-        popupImage.alt = name;
-        popupCaption.textContent = name;
-        openPopup(popupTypeImg);
-    })
-
-    return newCard;
-
+function createCard(cardData) {
+    const card = new Card(cardData, '#elements_template', openFotoPopUp)
+    const cardElement = card.generateCard();
+    return cardElement
 }
 
-initialCards.forEach((item) => сardElements.append(createCard(item)));
+function openFotoPopUp(name, link) {
+    popupImage.src = link;
+    popupImage.alt = name;
+    popupCaption.textContent = name;
+    openPopup(popupTypeImg);
+}
+
+// создание нач. карточек
+initialCards.forEach(element => {
+    const cardElement = createCard(element);
+    сardElements.append(cardElement);
+});
 
 
 
@@ -133,10 +136,9 @@ function handleFormSubmitCard(evt) {
 
 // editProfile //
 buttonEditProfile.addEventListener("click", () => {
-    resetErrorForm(formEditProfile)
+    profileValidation.resetValid();
     inputName.value = profileTitle.textContent;
     inputLink.value = profileSubtitle.textContent;
-    toggleButtonState(popupInputListProfile, popupSaveProfile, validationConfig.inactiveButtonClass);
     openProfile();
 })
 buttonClosePopUpProfile.addEventListener("click", () => closePopup(popupTypeProfile));
@@ -147,8 +149,7 @@ formEditProfile.addEventListener("submit", handleFormSubmitProfile);
 // card //
 buttonAddProfile.addEventListener("click", () => {
     formEditCard.reset();
-    resetErrorForm(formEditCard);
-    toggleButtonState(popupInputListCard, popupSaveCard, validationConfig.inactiveButtonClass);
+    cardValidation.resetValid();
     openCard();
 })
 
