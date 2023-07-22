@@ -23,15 +23,18 @@ export default class Card {
         this._setEventListeners();
         return this._element
     }
+    _handleOpenFotoPopUp = () => {
+        this._openFotoPopUp(this._name, this._link);
+    }
+    _handleRemoveTrash = () => {
+        this._element.remove();
+    }
+    _handleElementLike = () => {
+        this._elementLike.classList.toggle('element__button-like_active');
+    }
     _setEventListeners() {
-        this._elementFoto.addEventListener('click', () => {
-            this._openFotoPopUp(this._name, this._link);
-        });
-        this._elementTrash.addEventListener('click', () => {
-            this._element.remove();
-        });
-        this._elementLike.addEventListener('click', () => {
-            this._elementLike.classList.toggle('element__button-like_active');
-        });
+        this._elementFoto.addEventListener('click', this._handleOpenFotoPopUp);
+        this._elementTrash.addEventListener('click', this._handleRemoveTrash);
+        this._elementLike.addEventListener('click', this._handleElementLike );
     }
 }
