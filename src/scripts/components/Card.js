@@ -1,7 +1,7 @@
 export default class Card {
     constructor(cardData, selectorTemplate, openFotoPopUp) {
         this._link = cardData.link;
-        this._name = cardData.name;
+        this._name = cardData.title;
         this._selectorTemplate = selectorTemplate;
         this._openFotoPopUp = openFotoPopUp;
     }
@@ -23,6 +23,7 @@ export default class Card {
         this._setEventListeners();
         return this._element
     }
+
     _handleOpenFotoPopUp = () => {
         this._openFotoPopUp(this._name, this._link);
     }
@@ -32,6 +33,7 @@ export default class Card {
     _handleElementLike = () => {
         this._elementLike.classList.toggle('element__button-like_active');
     }
+    
     _setEventListeners() {
         this._elementFoto.addEventListener('click', this._handleOpenFotoPopUp);
         this._elementTrash.addEventListener('click', this._handleRemoveTrash);
