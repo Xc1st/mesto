@@ -7,7 +7,6 @@
     background-color: transparent;
     grid-area: butlike;
     background-size: cover;
-    margin: 30px 20px 0 0;
     padding: 0;
     cursor: pointer;
     transition: opacity 0.1s ease-in;
