@@ -13,7 +13,7 @@ module.exports = (env) => {
             path: path.resolve(__dirname, 'dist'),
             filename: production ? "scripts/[name].[contenthash].js"
                 : "scripts/[name].js",
-            publicPath: production ? './' : '',
+            // publicPath: production ? './' : '',
         },
         mode: 'development',
         devServer: {

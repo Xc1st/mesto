@@ -25,6 +25,8 @@ import {
     profileAvatarOverlay,
 } from '../scripts/utils/constants.js';
 
+let userId
+
 const api = new Api({
     baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-73',
     headers: {
@@ -56,22 +58,22 @@ const deleteCardPopup = new PopupCardDelete(popupDeleteSelector, ({ card, cardId
         })
         .catch((error) => console.error(`Ошибка при удалении карточки ${error}`))
         .finally(()=>{
-            deleteCardPopup.DefaultText();
+            deleteCardPopup.defaultText();
         })
 });
 
 function createCard(cardData) {
-    const card = new Card(cardData, '#elements_template', popupCardImage.open, deleteCardPopup.open, (likeElement, cardId) => {
-        if (likeElement.classList.contains("element__button-like_active")) {
+    const card = new Card(cardData, '#elements_template', popupCardImage.open, deleteCardPopup.open, (isLiked, cardId) => {
+        if (isLiked) {
             api.deleteLike(cardId)
                 .then(res => {
-                    card.isLike(res.likes)
+                    card.updateLikes(res.likes)
                 })
                 .catch((error) => console.error(`Ошибка при снятии лайка ${error}`))
         } else {
             api.addLike(cardId)
                 .then(res => {
-                    card.isLike(res.likes)
+                    card.updateLikes(res.likes)
                 })
                 .catch((error) => console.error(`Ошибка при добавлении лайка ${error}`))
         }
@@ -88,46 +90,38 @@ const section = new Section((element) => {
 const popupProfile = new PopupWithForm(popupProfileSelector, (data) => {
     api.setUserInfo(data)
         .then(res => {
-            userInfo.setUserInfo({
-                name: res.name,
-                about: res.about,
-                avatar: res.avatar
-            })
+            userInfo.setUserInfo(res)
             popupProfile.close();
         })
 
         .catch((error => console.error(`Ошибка при редактировании профиля ${error}`)))
         .finally(()=>{
-            popupProfile.DefaultText();
+            popupProfile.defaultText();
         });
 })
 
 const popupCard = new PopupWithForm(popupCardSelector, (data) => {
-    Promise.all([api.getInfo(), api.addNewCard(data)])
-        .then(([dataUser, dataCard]) => {
-            dataCard.myid = dataUser._id;
+    api.addNewCard(data)
+        .then((dataCard) => {
+            dataCard.myid = userInfo.getId();
             section.addItemPrepend(createCard(dataCard))
             popupCard.close()
         })
         .catch((error => console.error(`Ошибка при создании карточки ${error}`)))
         .finally(()=>{
-            popupCard.DefaultText();
+            popupCard.defaultText();
         });
 });
 
 const popupAvatar = new PopupWithForm(popupAvatarSelector, (data) => {
     api.setAvatar(data)
         .then(res => {
-            userInfo.setUserInfo({
-                name: res.name,
-                about: res.about,
-                avatar: res.avatar
-            })
+            userInfo.setUserInfo(res)
             popupAvatar.close();
         })
         .catch((error => console.error(`Ошибка при редактировании автара ${error}`)))
         .finally(() => {
-            popupAvatar.DefaultText();
+            popupAvatar.defaultText();
 
         });
 })
@@ -166,6 +160,7 @@ Promise.all([api.getInfo(), api.getCards()])
             about: dataUser.about,
             avatar: dataUser.avatar
         })
-        section.addCard(dataCards);
+        userInfo.setId(dataUser._id);
+        section.renderItems(dataCards);
     })
     .catch((error) => console.error(`Ошибка при создании начальных данных ${error}`))

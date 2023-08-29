@@ -5,7 +5,7 @@ export default class Api {
         this._authorization = options.headers.authorization;
     }
     _checkRes(res) {
-        return res.ok ? res.json() : Promise.reject
+        return res.ok ? res.json() : Promise.reject(`Ошибка ${res.status}`);
     }
     getInfo() {
         return fetch(`${this._url}/users/me`, {
